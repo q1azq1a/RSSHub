@@ -1,0 +1,24 @@
+name: Sync Fork
+
+on:
+  schedule:
+    - cron: '0 2 * * *'  # 每天凌晨 2 点自动运行
+  workflow_dispatch:     # 也可以手动触发
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0
+
+      - name: Sync upstream
+        uses: aormsby/fork-sync@v3.3
+        with:
+          upstream_repository: DIYgod/RSSHub
+          upstream_branch: master
+          target_branch: master
+          git_log_format_args: '--pretty=oneline'
